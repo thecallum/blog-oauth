@@ -1,7 +1,7 @@
 import { setCookie as nextSetCookie } from "cookies-next";
 
 const COOKIE_NAME = "ACCESS_TOKEN";
-const REDIRECT_URL = process.env.DOMAIN;
+const REDIRECT_URL = process.env.NEXT_PUBLIC_DOMAIN;
 
 export default function handler(req, res) {
   if (req.method !== "GET") return;
@@ -36,9 +36,9 @@ export default function handler(req, res) {
 }
 
 const verifyToken = (code) => {
-  const clientId = process.env.CLIENT_ID;
+  const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
   const clientSecret = process.env.CLIENT_SECRET;
-  const authEndpoint = `${process.env.DOMAIN}/api/auth`;
+  const authEndpoint = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth`;
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -58,7 +58,7 @@ const verifyToken = (code) => {
   };
 
   return new Promise((resolve) => {
-    fetch(`${process.env.COGNITO_URI}/token`, requestOptions)
+    fetch(`${process.env.NEXT_PUBLIC_COGNITO_URI}/token`, requestOptions)
       .then((response) => response.text())
       .then((response) => {
         resolve(response);

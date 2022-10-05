@@ -1,6 +1,7 @@
 import { setCookie as nextSetCookie } from "cookies-next";
 
 const COOKIE_NAME = "ACCESS_TOKEN";
+const REFRESH_COOKIE_NAME = "REFRESH_TOKEN";
 const REDIRECT_URL = process.env.NEXT_PUBLIC_DOMAIN;
 
 export default function handler(req, res) {
@@ -11,9 +12,17 @@ export default function handler(req, res) {
   return new Promise((resolve) => {
     verifyToken(code)
       .then((body) => {
-        const { access_token } = JSON.parse(body);
+        const { access_token, refresh_token } = JSON.parse(body);
 
         nextSetCookie(COOKIE_NAME, access_token, {
+          req,
+          res,
+          path: "/",
+          sameSite: "lax",
+          httpOnly: true,
+        });
+        
+        nextSetCookie(REFRESH_COOKIE_NAME, refresh_token, {
           req,
           res,
           path: "/",

@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import Link from "next/link";
+import Router from "next/router";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import {
   getCookie as nextGetCookie,
@@ -49,7 +50,13 @@ function MyApp({ Component, pageProps }) {
 }
 
 MyApp.getInitialProps = async ({ ctx, router }) => {
-  if (router.pathname === "/login") return {};
+  if (!!ctx.req) {
+    // Server side check
+    if (router.pathname === "/login") return {};
+  } else {
+    // Client side check
+    if (ctx.pathname === "/login") return {};
+  }
 
   if (!(await isAuthorised(ctx))) {
     redirect(ctx.req, ctx.res, "/login");
@@ -114,7 +121,10 @@ const createVerifier = () => {
 };
 
 const redirect = (req, res, path) => {
-  if (!req) return;
+  if (!req) {
+    Router.push("/login");
+    return {};
+  }
 
   res.writeHead(302, {
     Location: path,

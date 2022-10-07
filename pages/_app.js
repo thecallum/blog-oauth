@@ -53,7 +53,7 @@ MyApp.getInitialProps = async ({ ctx, router }) => {
 
   if (!(await isAuthorised(ctx))) {
     redirect(ctx.req, ctx.res, "/login");
-    return;
+    return {};
   }
 
   return {};

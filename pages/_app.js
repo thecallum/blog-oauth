@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-
+import Link from "next/link";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import {
   getCookie as nextGetCookie,
@@ -9,8 +9,43 @@ import {
 const COOKIE_NAME = "ACCESS_TOKEN";
 const REFRESH_COOKIE_NAME = "REFRESH_TOKEN";
 
+const Header = () => (
+  <div
+    style={{
+      padding: "15px 15px",
+      borderBottom: "1px solid white",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}
+  >
+    <h2
+      style={{
+        margin: 0,
+        padding: 0,
+        fontWeight: "normal",
+      }}
+    >
+      Cognito App
+    </h2>
+    <ul style={{ margin: 0, padding: 0, display: "flex" }}>
+      <li style={{ display: "block", marginRight: "15px" }}>
+        <Link href="/">Home</Link>
+      </li>
+      <li style={{ display: "block" }}>
+        <Link href="/login">Login</Link>
+      </li>
+    </ul>
+  </div>
+);
+
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Header />
+      <Component {...pageProps} />
+    </>
+  );
 }
 
 MyApp.getInitialProps = async ({ ctx, router }) => {
